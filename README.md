@@ -26,7 +26,7 @@ This is a step by step guide of how you can setup up your environment to run the
    ```
 3. activate environment
    ```sh
-   source activate text_classification
+   conda activate text_classification
    ```
 4. install dependencies
    ```sh
