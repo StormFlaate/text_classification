@@ -58,7 +58,7 @@ correct_bias_val = False
 
 
 """ SECTION 1: Data preprocessing section"""
-    if __name__ == '__main__':   
+if __name__ == '__main__':   
     # creating a list of all positive sentences
     pos_data_full = create_dataset_list("./twitter-datasets/train_pos_full.txt")
     pos_labels_full = [1]*len(pos_data_full)
