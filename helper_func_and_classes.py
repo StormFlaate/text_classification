@@ -464,7 +464,7 @@ def create_data_loader_BERT(data_list, labels, tokenizer, max_len, batch_size):
         labels = labels,
         max_len = max_len,
         tokenizer = tokenizer)
-    data_loader = DataLoader(dataset, batch_size=batch_size, num_workers=16)
+    data_loader = DataLoader(dataset, batch_size=batch_size, num_workers=4)
     
     return data_loader
 
