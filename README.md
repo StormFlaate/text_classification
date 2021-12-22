@@ -36,6 +36,6 @@ This is a step by step guide of how you can setup up your environment to run the
    ```
 5. install dependencies
    ```sh
-   pip install transformers
+   pip install -r requirements_pip.txt
    ```
 
