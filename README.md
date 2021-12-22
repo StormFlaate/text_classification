@@ -12,12 +12,15 @@ This is a step by step guide of how you can setup up your environment to run the
 ### Prerequisites
 
 * conda
+* pip
+* python3
+* Download 'epfml-text' from [here](https://www.aicrowd.com/challenges/epfl-ml-text-classification/dataset_files), unzip and add to `/twitter-datasets` folder.
 
 
 ### Installation
-1. Clone the repo
+1. Clone the repo and enter directory `text_classification`
    ```sh
-   git clone https://github.com/StormFlaate/text_classification
+   git clone https://github.com/StormFlaate/text_classification 
    ```
 2. create environment
    ```sh
@@ -25,10 +28,14 @@ This is a step by step guide of how you can setup up your environment to run the
    ```
 3. activate environment
    ```sh
-   source activate text_classification
+   conda activate text_classification
    ```
 4. install dependencies
    ```sh
    conda install --file requirements.txt
+   ```
+5. install dependencies
+   ```sh
+   pip install transformers
    ```
 
