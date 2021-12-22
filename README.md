@@ -16,9 +16,9 @@ This is a step by step guide of how you can setup up your environment to run the
 
 
 ### Installation
-1. Clone the repo
+1. Clone the repo and enter directory `text_classification`
    ```sh
-   git clone https://github.com/StormFlaate/text_classification
+   git clone https://github.com/StormFlaate/text_classification 
    ```
 2. create environment
    ```sh
