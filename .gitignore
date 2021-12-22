@@ -1,0 +1,11 @@
+/word_embeddings
+/output_dir_training_arguments
+train_neg_full.txt
+train_pos_full.txt
+*.txt
+sample_submission.csv
+/__pycache__
+.DS_store
+!requirements.txt
+.vector_cache
+.ipynb_checkpoints
