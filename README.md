@@ -12,7 +12,7 @@ This is a step by step guide of how you can setup up your environment to run the
 ### Prerequisites
 
 * conda
-* pip
+* pip3
 * python3
 * Download 'epfml-text' from [here](https://www.aicrowd.com/challenges/epfl-ml-text-classification/dataset_files), unzip and add to `/twitter-datasets` folder.
 
@@ -36,6 +36,6 @@ This is a step by step guide of how you can setup up your environment to run the
    ```
 5. install dependencies
    ```sh
-   pip install -r requirements_pip.txt
+   pip3 install -r requirements_pip.txt
    ```
 
