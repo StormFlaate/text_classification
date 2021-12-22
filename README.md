@@ -32,4 +32,8 @@ This is a step by step guide of how you can setup up your environment to run the
    ```sh
    conda install --file requirements.txt
    ```
+5. install dependencies
+   ```sh
+   pip install transformers
+   ```
 
