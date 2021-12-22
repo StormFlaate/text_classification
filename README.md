@@ -11,24 +11,24 @@ This is a step by step guide of how you can setup up your environment to run the
 
 ### Prerequisites
 
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+* conda
+* pip
 
 ### Installation
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/StormFlaate/text_classification
    ```
-3. Install NPM packages
+2. create environment
    ```sh
-   npm install
+   conda create --name text_classification
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. activate environment
+   ```sh
+   source activate text_classification
+   ```
+4. install dependencies
+   ```sh
+   conda install --file requirements.txt
+   ```
+
