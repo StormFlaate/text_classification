@@ -10,3 +10,4 @@ sample_submission.csv
 .vector_cache
 .ipynb_checkpoints
 !empty.txt
+!requirements_pip.txt
