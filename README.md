@@ -3,7 +3,7 @@
 - Fridtjof Storm Flaate
 
 ## Abstract:
-The goal of this project was to build a model that could accurately classify tweets as either positive or negative. In this project, you will find six different models. Three classic machine learning models and three are neural networks. The best performing model is the neural network using the pre-trained bidirectional encoder representations from transformers, also called BERT. The transfer-learning model gave us an accuracy of $xx.xx\%$ and an F1 score of $xx.xx\%$.
+The goal of this project was to build a model that could accurately classify tweets as either positive or negative. In this project, you will find six different models. Three classic machine learning models and three neural networks. The best performing model is the neural network using the pre-trained bert-base-casebidirectional encoder representations from transformers, also called BERT. The transfer-learning model gave us an accuracy of $xx.xx\%$ and an F1 score of $xx.xx\%$.
 
 
 ## Setup:
@@ -12,7 +12,7 @@ This is a step by step guide of how you can setup up your environment to run the
 ### Prerequisites
 
 * conda
-* pip
+
 
 ### Installation
 1. Clone the repo
