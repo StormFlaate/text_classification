@@ -32,7 +32,8 @@ This is a step by step guide of how you can setup up your environment to run the
    ```
 4. install dependencies
    ```sh
-   conda install --file requirements.txt
+   conda install --file requirements.txt && conda install -c huggingface transformers
+
    ```
 5. install dependencies
    ```sh
