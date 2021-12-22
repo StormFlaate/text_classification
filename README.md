@@ -12,6 +12,8 @@ This is a step by step guide of how you can setup up your environment to run the
 ### Prerequisites
 
 * conda
+* pip
+* python3
 * Download 'epfml-text' from [here](https://www.aicrowd.com/challenges/epfl-ml-text-classification/dataset_files), unzip and add to `/twitter-datasets` folder.
 
 
