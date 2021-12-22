@@ -40,7 +40,7 @@ RANDOM_SEED = 123
 random.seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 torch.manual_seed(RANDOM_SEED)
-
+warnings.filterwarnings("ignore")
 
 # sets up cuda if gpu is available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
