@@ -40,3 +40,11 @@ This is a step by step guide of how you can setup up your environment to run the
    pip3 install -r requirements_pip.txt
    ```
 
+## Overview:
+### File explenations:
+**setup files:**
+- `requirements.txt`:        requirements file to install conda dependencies  
+- `requirements_pip.txt`:    requirements file to install python3 dependecies
+- `README.md`:               file containing information about the project
+**machine learning models:**
+- [SGD_classifier.ipynb](./SGD_classifier.ipynb)
