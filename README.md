@@ -5,6 +5,7 @@
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)
 ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
 # CS-433 Project 2, 2021, EPFL Text classification
+# Machine Learning for Binary Text Classification
 ## Author: 
 - Fridtjof Storm Flaate | fridtjof.flaate@epfl.ch
 ## Submission:
