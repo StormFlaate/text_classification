@@ -6,8 +6,9 @@
 ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
 # CS-433 Project 2, 2021, EPFL Text classification
 ## Author: 
-- Fridtjof Storm Flaate
-
+- Fridtjof Storm Flaate | fridtjof.flaate@epfl.ch
+## Submission:
+**Submission #169334**
 ## Abstract:
 The goal of this project was to build a model that could accurately classify tweets as either positive or negative. In this project, you will find six different models. Three classic machine learning models and three neural networks. The best performing model is the neural network using the pre-trained bert-base-casebidirectional encoder representations from transformers, also called BERT. The transfer-learning model gave us an accuracy of 89.2% and an F1 score of 89.5%.
 
@@ -64,6 +65,3 @@ This is a step by step guide of how you can setup up your environment to run the
 - [helper functions](./helper_func_and_classes.py): contains all helper functions and classes used in the project
 ### Folders:
 - [twitter-datasets](./twitter-datasets): will contain all data-sets used for this project - need to be downlaoded manually.
-
-
-
