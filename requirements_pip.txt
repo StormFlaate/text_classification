@@ -35,3 +35,5 @@ transformers==4.15.0
 typing_extensions==4.0.1
 urllib3==1.26.7
 wordcloud==1.8.1
+sentence-transformers==2.1.0
+sentencepiece==0.1.96
