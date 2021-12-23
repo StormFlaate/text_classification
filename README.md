@@ -66,4 +66,3 @@ This is a step by step guide of how you can setup up your environment to run the
 - [dataset](./twitter-datasets): will contain all data-sets used for this project - need to be downlaoded manually.
 
 
-![](https://img.shields.io/badge/Code-React-informational?style=flat&logo=react&color=61DAFB)
