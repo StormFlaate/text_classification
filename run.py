@@ -47,11 +47,11 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # setup of parameters to create submission csv file
 max_length = 37
-batch_size = 128
+batch_size = 32
 test_size = 0.1
 num_classes = 2
-dropout_prob = 0.35
-num_epoch = 4
+dropout_prob = 0.4
+num_epoch = 3
 learning_rate = 2.5e-5
 correct_bias_val = False
 
