@@ -41,13 +41,19 @@ This is a step by step guide of how you can setup up your environment to run the
    ```
 
 ## Overview:
-### File explenations:  
-**setup files:**
+### Setup files:
 - [requirements.txt](./requirements.txt): file to install conda dependencies  
 - [requirements_pip.txt](./requirements_pip.txt): file to install python3 dependecies
 - [README.md](./README.md): file containing information about the project<br>
-**machine learning models:**<br>  
+### Machine learning models:
 - [SGD log loss](./SGD_classifier.ipynb): trianing and testing of model
 - [Logisitic regression](./LogisticRegression_classification.ipynb): training and testing of model
 - [NN GloVe](./NeuralNetworkGloVe.ipynb): Neural network with aggregated GloVe word embeddings
-- 
+- [NN sentence transformer](./NeuralNetwork_MiniLM.ipynb): NN with all-MiniLM-L6-v2 sentence embedding
+- [NN transfer learning BERT](./BERT_classification.ipynb): Transfer learning model BERT
+### Run files:
+- [run.py](./run.py): file containing everything to recreate best submission
+### Helper functions:
+- [helper functions](./helper_func_and_classes.py): contains all helper functions and classes used in the project
+### Folders:
+- [dataset](./twitter-datasets): will contain all data-sets used for this project - need to be downlaoded manually.
