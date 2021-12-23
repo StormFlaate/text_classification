@@ -63,7 +63,7 @@ This is a step by step guide of how you can setup up your environment to run the
 ### Helper functions:
 - [helper functions](./helper_func_and_classes.py): contains all helper functions and classes used in the project
 ### Folders:
-- [dataset](./twitter-datasets): will contain all data-sets used for this project - need to be downlaoded manually.
+- [twitter-datasets](./twitter-datasets): will contain all data-sets used for this project - need to be downlaoded manually.
 
 
 
