@@ -10,7 +10,7 @@
 
 ## Abstract:
 The goal of this project was to build a model that could accurately classify tweets as either positive or negative. In this project, you will find six different models. Three classic machine learning models and three neural networks. The best performing model is the neural network using the pre-trained bert-base-casebidirectional encoder representations from transformers, also called BERT. The transfer-learning model gave us an accuracy of 89.2% and an F1 score of 89.5%.
-
+.
 
 ## Setup:
 This is a step by step guide of how you can setup up your environment to run the run.py that will create the submission file.
