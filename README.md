@@ -6,7 +6,7 @@
 ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
 # CS-433 Project 2, 2021, EPFL Text classification
 ## Author: 
-- Fridtjof Storm Flaate
+- Fridtjof Storm Flaate | fridtjof.flaate@epfl.ch
 ## Submission:
 **Submission #169334**
 ## Abstract:
