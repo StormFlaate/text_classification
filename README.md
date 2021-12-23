@@ -41,10 +41,13 @@ This is a step by step guide of how you can setup up your environment to run the
    ```
 
 ## Overview:
-### File explenations:
+### File explenations:  
 **setup files:**
-- `requirements.txt`:        requirements file to install conda dependencies  
-- `requirements_pip.txt`:    requirements file to install python3 dependecies
-- `README.md`:               file containing information about the project
-**machine learning models:**
-- [SGD_classifier.ipynb](./SGD_classifier.ipynb)
+- [requirements.txt](./requirements.txt): file to install conda dependencies  
+- [requirements_pip.txt](./requirements_pip.txt): file to install python3 dependecies
+- [README.md](./README.md): file containing information about the project<br>
+**machine learning models:**<br>  
+- [SGD log loss](./SGD_classifier.ipynb): trianing and testing of model
+- [Logisitic regression](./LogisticRegression_classification.ipynb): training and testing of model
+- [NN GloVe](./NeuralNetworkGloVe.ipynb): Neural network with aggregated GloVe word embeddings
+- 
