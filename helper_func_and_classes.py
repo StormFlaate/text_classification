@@ -9,7 +9,6 @@ from torch.utils.data import Dataset, DataLoader, TensorDataset
 
 
 # transformers
-import transformers
 from transformers import BertModel
 
 
@@ -34,35 +33,37 @@ from tqdm import tqdm
 RANDOM_SEED = 123
 
 
-def create_dataset_list(file_path_pos):
+def create_dataset_list(file_path):
     """
-    Explanation:        Takes in one filepath, creates list with one sentence in each
+    Explanation:        Takes in one filepath, creates list with one sentence at each index
         
     INPUT:
-     - file_path_pos:   file path to the positive tweets      
-     - file_path_neg:   file path to the negative tweets
+     - file_path:       file path to the sentences in .txt format      
     
-    RETURN:
-     - data:             list containing all sentences in the file right-stripped
+    OUTPUT:
+     - data:            list containing all sentences in the file right-stripped
     """
-    data = list(map(str.rstrip, open(file_path_pos)))
+    data = list(map(str.rstrip, open(file_path)))
     return data
 
 
-def create_submission_file(label_prediction):
+def create_submission_file(label_predictions):
     """
-    Explanation:            Takes in labels in the correct order and create a submission file (.csv)
+    Explanation:             Takes in labels in the correct order and create a submission file (.csv)
     
     INPUT:
-     - label_prediction:    array containing zeros and ones, length is 10 000
+     - label_predictions:    numpy array containing zeros and ones, length is 10 000
 
     OUTPUT:
-     - void:                creates a csv file containing Id, Prediction (10 000 rows) with -1 and 1
+     - void:                 creates a csv file containing columns = [Id, Prediction]. 10 000 rows of -1 and 1.
     """
+    # will always write to same file, will therefore overwrite existing information
     f = open('./submission_labels.csv', 'w')
     writer = csv.writer(f)
+    # writes in the csv header
     writer.writerow(['Id', 'Prediction'])
-    for index, label in enumerate(label_prediction):
+    # index to create id, and 0 -> -1 | 1 -> 1
+    for index, label in enumerate(label_predictions):
         row = [index+1,0]
         if label == 0:
             row[1] = -1
@@ -74,12 +75,12 @@ def create_submission_file(label_prediction):
 
 def create_vocab(file_path_pos, file_path_neg, file_path_test, stem=False):
     """
-    Explanation:        Translates negative tweets, positive tweets and test tweets into a lookup dictionary
+    Explanation:        Translates negative tweets, positive tweets and test/submission tweets into a lookup dictionary
         
     INPUT:
-     - file_path_pos:   file path to the positive tweets      
+     - file_path_pos:   file path to the positive tweets
      - file_path_neg:   file path to the negative tweets
-     - file_path_test:  file path to the test tweets
+     - file_path_test:  file path to the test/submission tweets
      - stem:            if the words should be stemmed or not (default to false)
     
     RETURN:
@@ -140,13 +141,13 @@ def create_vocab(file_path_pos, file_path_neg, file_path_test, stem=False):
 
 class TwitterDataset(Dataset):
     """
-    Explanation:        Twitter dataset loader
+    Explanation:        Twitter data loader
     
     FUNCTIONS:
      - __init__:        setup, creates dataset and labels
-     - __getitem__:     returns a tuple, (single tweet in list format, label to tweet)
+     - __getitem__:     returns a tuple, (tweet, label)
      - __len__:         returns length of datset
-     - vocab_len:       returns length of vocabulary
+     - vocab_len:       returns length of vocabulary, i.e. unique words in data
     
     """
     def __init__(self, word_to_index_dct, data_pos, data_neg, data_submission, max_sentence_length):
@@ -192,7 +193,7 @@ class TwitterDataset(Dataset):
 
 class TwitterDataset_BERT(Dataset):
     """
-    Explanation:        Twitter dataset loader, specific for BERT
+    Explanation:        Twitter data loader, specific for BERT
     
     FUNCTIONS:
      - __init__:        setup, loads in dataset, labels, tokenizer and fixed size of sentences
@@ -213,25 +214,26 @@ class TwitterDataset_BERT(Dataset):
         sample = str(self.samples[item])
         label = self.labels[item]
         encoding = self.tokenizer.encode_plus(
-        sample,
-        add_special_tokens=True,
-        max_length=self.max_len,
-        return_attention_mask=True,
-        pad_to_max_length=True,
-        return_token_type_ids=False,
-        return_tensors='pt')
+            sample,
+            add_special_tokens=True,
+            max_length=self.max_len,
+            return_attention_mask=True,
+            pad_to_max_length=True,
+            return_token_type_ids=False,
+            return_tensors='pt')
 
-        return {
+        output_dict = {
         'input_ids': encoding['input_ids'].flatten(),
         'attention_mask': encoding['attention_mask'].flatten(),
-        'labels': torch.tensor(label, dtype=torch.long)
+        'labels': torch.tensor(label, dtype=torch.long) # setting data type to torch.long on labels
         }
+        return output_dict
 
 
 class BERTClassifier(nn.Module):
     """
-    Explanation:                This is a neural network architecture which builds on top of the pretrained BertModel, 
-                                the last hidden linear layer is a dimension = 768. Use dropout for regularization
+    Explanation:                This is a transfer learning model which builds on top of the pretrained BertModel, 
+                                the last hidden layer has 768 nodes. Use dropout for regularization.
     
     INPUT: 
      - num_classes:             number of different classes we are predicting
@@ -245,6 +247,8 @@ class BERTClassifier(nn.Module):
     # Initializes the classifier with correct parameters
     def __init__(self, num_classes, p, pretrained_model_name):
         super(BERTClassifier, self).__init__()
+        
+        # setting return_dict=False to remove string error
         self.bert_pretrained = BertModel.from_pretrained(pretrained_model_name, return_dict=False)
         self.fc1 = nn.Linear(self.bert_pretrained.config.hidden_size, num_classes)
         self.dropout = nn.Dropout(p=p)
@@ -263,7 +267,9 @@ class BERTClassifier(nn.Module):
 
 class NN(nn.Module):
     """
-    EXPLANATION:  Class for neural network architecture using 2 hidden layers with 200 nodes in each
+    EXPLANATION:    Class for neural network architecture using 2 hidden layers with 200 nodes in each, activation functin: leaky relu
+                    Architecture: 200 (input) -> 200 -> 200 (dropout) -> 2 (output)
+    
     """
     def __init__(self, input_size, num_classes, p):
         super(NN, self).__init__()
@@ -288,7 +294,8 @@ class NN(nn.Module):
 
 class NN_se(nn.Module):
     """
-    EXPLANATION:  Class for neural network architecture using 2 hidden layers with 384 nodes in each
+    EXPLANATION:    Class for neural network architecture using 2 hidden layers with 384 nodes in each, activation functin: leaky relu
+                    Architecture: 384 (input) -> 384 -> 384 (dropout) -> 2 (output)
     """
     def __init__(self, input_size, num_classes, p):
         super(NN_se, self).__init__()
@@ -320,19 +327,23 @@ def train_one_epoch(model, data_loader, loss_func, optimizer, device, scheduler,
      - loss_func:         the loss function that will be used on the current epoch
      - optimizer:         the optimizer used for the model, used to change weights to reduce loss
      - device:            device for gpu cuda
-     - scheduler:         the scheduler used for the model, used to update learning rate
+     - scheduler:         the scheduler used for the model, used to update learning rates
      - num_datapoints:    the total number of samples in current epoch, used to calculate accuracy
 
     OUTPUT:
-    - accuracy:           accuracy of model at current epoch
-    - mean_loss:          mean loss of model at curren epoch 
+    - accuracy:           accuracy of model after current epoch
+    - mean_loss:          mean loss of model after curren epoch 
     """
 
+    # marks model for training
     model = model.train()
+
+    # setup for current epoch
     losses = []
     correct_predictions = 0
     for subpart in tqdm(data_loader):
         
+        # current batch
         input_ids = subpart["input_ids"].to(device) 
         attention_mask = subpart["attention_mask"].to(device)
         labels = subpart["labels"].to(device)
@@ -367,7 +378,7 @@ def train_one_epoch(model, data_loader, loss_func, optimizer, device, scheduler,
 
 def evaluate_model(model, data_loader, device, loss_func, num_datapoints):
     """
-    Explanation:          This function will evaluate the model -> give accuracy and mean loss
+    Explanation:          This function will evaluate the model -> give accuracy and mean loss without updating model
     
     INPUT: 
      - model:             current state of the model
@@ -380,7 +391,10 @@ def evaluate_model(model, data_loader, device, loss_func, num_datapoints):
     - accuracy:           accuracy of model 
     - mean_loss:          mean loss of model 
     """
+    # marks model for evaluate
     model = model.eval()
+
+    # setup
     losses = []
     correct_predictions = 0
     
@@ -388,7 +402,8 @@ def evaluate_model(model, data_loader, device, loss_func, num_datapoints):
     with torch.no_grad():
         # loads in batches of data form the data_loader
         for subpart in data_loader:
-
+            
+            # current batch
             input_ids = subpart["input_ids"].to(device) 
             attention_mask = subpart["attention_mask"].to(device)
             labels = subpart["labels"].to(device)
@@ -412,7 +427,7 @@ def evaluate_model(model, data_loader, device, loss_func, num_datapoints):
 
 def create_predictions_BERT(model, data_loader, device):
     """
-    Explanation:          This function will run model on dataloader
+    Explanation:          This function will run model on dataloader outputting predictions
     
     INPUT: 
      - model:             current state of the model
@@ -420,28 +435,32 @@ def create_predictions_BERT(model, data_loader, device):
      - device:            device for gpu cuda
 
     OUTPUT:
-    - accuracy:           accuracy of model 
-    - mean_loss:          mean loss of model 
+    - pred_labels:        predicted labels given data_loader input, either 0 or 1 for each elemnt
+    
     """
+    # marks model as evaluate since we won't update model
     model = model.eval()
+    
+    # setup
     pred_labels = np.array([])
+
     # turn off gradients calculation so we don't update model while running test data through model
     with torch.no_grad():
         for subpart in data_loader:
+            # current batch
             input_ids = subpart["input_ids"].to(device) 
             attention_mask = subpart["attention_mask"].to(device)
-            
             
             outputs = model(
                 input_ids=input_ids,
                 attention_mask=attention_mask
             )
             _, predicted = torch.max(outputs, dim=1)
+            
             # adds label to list of labels
             predicted = predicted.cpu().detach().numpy()
             pred_labels = np.append(pred_labels, predicted, axis=0)
-            
-            
+             
     return pred_labels
 
 
@@ -464,7 +483,7 @@ def create_data_loader_BERT(data_list, labels, tokenizer, max_len, batch_size):
         labels = labels,
         max_len = max_len,
         tokenizer = tokenizer)
-    data_loader = DataLoader(dataset, batch_size=batch_size, num_workers=4)
+    data_loader = DataLoader(dataset, batch_size=batch_size, num_workers=8)
     
     return data_loader
 
@@ -477,14 +496,17 @@ def create_data_loader_MiniLM(pos_data_embed, neg_data_embed, batch_size, test_s
      - pos_data_embed:  list of sentence embeddings for positive labeled sentences
      - neg_data_embed:  list of sentence embeddings for negative labeled sentences
      - batch_size:      batch size for the data loader
-     - test_size:       how big proportion of the data should be test data
+     - test_size:       how big proportion of the data should be test data -> decimal value between [0.0, 1.0]
 
     OUTPUT:
      - train_loader:        train data loader for full dataset
      - train_loader_lite:   train data loader for subpart of dataset
      - test_loader:         test data loader for full dataset
      - test_loader_lite:    test data loader for subpart of dataset
-
+     - train_data_labels:   training labels for full dataset
+     - train_labels_lite:   training labels for subpart of dataset
+     - test_data_labels:    testing labels for full dataset
+     - test_labels_lite:    testing labels subpart of dataset
     """
 
     # appending correct labels to the corresponding vectors
@@ -543,7 +565,7 @@ def create_scaled_matrix_tensor(
     dim_norm):
 
     """
-    EXPLANATION:                Will turn full and lite dataset (train and test) into scaled tensors
+    EXPLANATION:                Will turn full and lite dataset (train and test) into scaled tensors, and return their labels as well
 
     INPUT:
      - train_data_full:         full training data
@@ -557,10 +579,14 @@ def create_scaled_matrix_tensor(
      - dim_norm:                dim value for normalize function
      
     OUTPUT:
-     - s__train_full: scaled matrix for training of full dataset
-     - s__train_lite: scaled matrix for training of subpart of full dataset
-     - s__test_full:  scaled matrix for testing of full dataset
-     - s__test_lite:  scaled matrix for testing of subpart of full dataset
+     - s_train_full:            scaled matrix for training of full dataset
+     - s_train_lite:            scaled matrix for training of subpart of full dataset
+     - s_test_full:             scaled matrix for testing of full dataset
+     - s_test_lite:             scaled matrix for testing of subpart of full dataset
+     - labels_train_full:       labels to corresponding training matrix of full dataset
+     - labels_train_lite:       labels to corresponding training matrix of subpart of full dataset
+     - labels_test_full:        labels to corresponding testing matrix of full dataset
+     - labels_test_lite:        labels to corresponding testing matrix of subpart of full dataset
     """
     # full version of dataset used for training the model
     matrix_train_full, labels_train_full = word_vec_to_aggregated_word_embeddings(
@@ -607,7 +633,21 @@ def create_data_loader_GloVe(
     labels_train,
     labels_test,
     batch_size):
-    
+
+    """
+    EXPLANATION:        creates a trrain and test data loader specific for the glove data models
+
+    INPUT:
+     - train:           training data in GloVe word embeddings format
+     - test:            test data in GloVe word embeddings format
+     - labels_train:    labels ot the corresponding training data
+     - labels_test:     labels ot the corresponding testing data
+     - batch_size:      batch size for the data loader
+
+    OUTPUT:
+     - train_loader:    data loader for training, will contain both data and labels
+     - test_laoder:     data loader for testing, will contain both data and labels
+    """
     
     labels_train_full = labels_train.type(torch.LongTensor) # can't be float
     labels_test_full = labels_test.type(torch.LongTensor) # can't be float
@@ -619,8 +659,7 @@ def create_data_loader_GloVe(
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size,  shuffle=False)
 
     return train_loader, test_loader
-
-    
+  
 
 def split_dataset(dataset, train_percent):
     """
@@ -628,7 +667,7 @@ def split_dataset(dataset, train_percent):
     
     INPUT:           
      - dataset           Dataset of type TwitterDataset
-     - train_percent     % of full dataset that will be used for training, rest for testing
+     - train_percent     % of full dataset that will be used for training, rest for testing test_percent = (1 - train_percent)
      
     OUPUT:
      - train_data:       Shuffled list of (vector, label)
@@ -652,17 +691,17 @@ def split_dataset(dataset, train_percent):
 
 def word_vec_to_word_embeddings(dataset, wordembeddings_dct, vec_size, dimension):
     """
-    Explanation:             Translates dataset into flattened wordembeddings
+    Explanation:             Translates dataset into flattened wordembeddings, one long vector per sentence
 
     INPUT:  
      - dataset:              list of sentences and their corresponding label
      - wordembeddings_dct:   dictionary containing translations from word-index to word-embedding
-     - vec_sice:             longest vector in the dataset
+     - vec_sice:             longest allowed vector in the dataset
      - dimension:            dimensions of the word_embeddings
 
     OUTPUT:
      - matrix:               2D matrix with (dimension * longest sentences) number of features
-     - labels:               labels for each of the sentences
+     - labels:               labels for the corresponding word embedding (sentence)
     """
     matrix = torch.zeros(len(dataset), vec_size*dimension)
     labels = torch.zeros(len(dataset))
@@ -681,7 +720,7 @@ def word_vec_to_word_embeddings(dataset, wordembeddings_dct, vec_size, dimension
 
 def word_vec_to_aggregated_word_embeddings(dataset, wordembeddings_dct, dimension):
     """
-    Explanation:             Translates dataset into an aggregated sum of all the word-embeddings for each setnence
+    Explanation:             Translates dataset into an aggregated sum over all the word-embeddings for each setence
 
     INPUT:  
      - dataset:              list of sentences and their corresponding label
@@ -703,7 +742,7 @@ def word_vec_to_aggregated_word_embeddings(dataset, wordembeddings_dct, dimensio
         for word_index, word in enumerate(sentence):
             current_sentence += wordembeddings_dct[word].type(torch.float)
         
-        # Dividing by sentence length so we long sentences give more weight just because their long
+        # Dividing by sentence length
         matrix[sentence_index] = torch.flatten(current_sentence)/len(sentence) 
         labels[sentence_index] = label
     return matrix, labels
@@ -715,7 +754,7 @@ def word_embeddings_extraction(data, input_labels, wordembeddings_dct, vec_size,
 
     INPUT:  
      - data:                 list of sentences 
-     - input_labels:         list of labels
+     - input_labels:         list of labels for corresponding sentence
      - wordembeddings_dct:   dictionary containing translations from word-index to word-embedding
      - vec_sice:             longest vector in the dataset
      - dimension:            dimensions of the word_embeddings
@@ -777,7 +816,7 @@ def current_batch_train(lr_model, dataset, word_embeddings, vec_size, dimensions
 
 def batch_sized_linear_model(batch_size, dataset, word_embeddings, vec_size, dimensions, alpha):
     """
-    Explanation:             Trains a linear model in batch-size chunks
+    Explanation:             Trains a linear model in batch-sized chunks
 
     INPUT:
      - batch_size:            number of sentences that will be changed into long word-embeddings
@@ -851,7 +890,6 @@ def get_count_of_longest_sentence(dataset):
     INPUT:
      - dataset:               dataset of type TwitterDataset
      
-
     OUTPUT:
      - max_len:               length of the longest sentence, (int)
     """
