@@ -66,4 +66,4 @@ This is a step by step guide of how you can setup up your environment to run the
 - [dataset](./twitter-datasets): will contain all data-sets used for this project - need to be downlaoded manually.
 
 
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=yushi1007&layout=compact)](https://github.com/yushi1007)
+
