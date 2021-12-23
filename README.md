@@ -48,6 +48,7 @@ This is a step by step guide of how you can setup up your environment to run the
 ### Machine learning models:
 - [SGD log loss](./SGD_classifier.ipynb): trianing and testing of model
 - [Logisitic regression](./LogisticRegression_classification.ipynb): training and testing of model
+- [Random forest](.RandomForest_classifier.ipynb): training and testing of model
 - [NN GloVe](./NeuralNetworkGloVe.ipynb): Neural network with aggregated GloVe word embeddings
 - [NN sentence transformer](./NeuralNetwork_MiniLM.ipynb): NN with all-MiniLM-L6-v2 sentence embedding
 - [NN transfer learning BERT](./BERT_classification.ipynb): Transfer learning model BERT
